@@ -217,7 +217,7 @@ namespace TinyOAuth1
 
 		// 6.3.1. Consumer Requests an Access Token +
 		// 6.3.2. Service Provider Grants an Access Token
-		public async Task<AccessTokenInfo> GetAccessToken(string requestToken, string requestTokenSecret, string verifier)
+		public async Task<AccessTokenInfo> GetAccessTokenAsync(string requestToken, string requestTokenSecret, string verifier)
 		{
 			/* 6.3.1.  Consumer Requests an Access Token
 			
@@ -295,7 +295,7 @@ namespace TinyOAuth1
 		}
 
 		//6.1.1. Consumer Obtains a Request Token (https://oauth.net/core/1.0a/)
-		public async Task<RequestTokenInfo> GetRequestToken()
+		public async Task<RequestTokenInfo> GetRequestTokenAsync()
 		{
 			/*6.1.1.  Consumer Obtains a Request Token
 

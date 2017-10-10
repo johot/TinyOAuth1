@@ -6,10 +6,10 @@ namespace TinyOAuth1
 {
 	public interface ITinyOAuth
 	{
-		Task<AccessTokenInfo> GetAccessToken(string requestToken, string requestTokenSecret, string verifier);
+		Task<AccessTokenInfo> GetAccessTokenAsync(string requestToken, string requestTokenSecret, string verifier);
 		AuthenticationHeaderValue GetAuthorizationHeader(string accessToken, string accessTokenSecret, string url, HttpMethod httpMethod);
 		string GetAuthorizationHeaderValue(string accessToken, string accessTokenSecret, string url, HttpMethod httpMethod);
 		string GetAuthorizationUrl(string requestToken);
-		Task<RequestTokenInfo> GetRequestToken();
+		Task<RequestTokenInfo> GetRequestTokenAsync();
 	}
 }

@@ -84,17 +84,17 @@ var config = new TinyOAuthConfig
 var tinyOAuth = new TinyOAuth(config);
 
 // Get the request token and request token secret
-var requestTokenInfo = await tinyOAuth.GetRequestToken();
+var requestTokenInfo = await tinyOAuth.GetRequestTokenAsync();
 
 // Construct the authorization url
 var authorizationUrl = tinyOAuth.GetAuthorizationUrl(requestTokenInfo.RequestToken);
 
 // *** You will need to implement these methods yourself ***
-await LaunchWebBrowser(authorizationUrl); // Use Process.Start(authorizationUrl), LaunchUriAsync(new Uri(authorizationUrl)) etc...
-var verificationCode = await InputVerificationCode(authorizationUrl);
+await LaunchWebBrowserAsync(authorizationUrl); // Use Process.Start(authorizationUrl), LaunchUriAsync(new Uri(authorizationUrl)) etc...
+var verificationCode = await InputVerificationCodeAsync(authorizationUrl);
 
 // *** Important: Do not run this code before visiting and completing the authorization url ***
-var accessTokenInfo = await tinyOAuth.GetAccessToken(requestTokenInfo.RequestToken, requestTokenInfo.RequestTokenSecret, verificationCode);
+var accessTokenInfo = await tinyOAuth.GetAccessTokenAsync(requestTokenInfo.RequestToken, requestTokenInfo.RequestTokenSecret, verificationCode);
 ```
 
 ### Save tokens
