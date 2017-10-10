@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <None Remove=".gitignore" />
+    <None Remove="pack.bat" />
   </ItemGroup>
 
 </Project>

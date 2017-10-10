@@ -6,6 +6,11 @@ A tiny, super easy to use OAuth 1.0a library with support for the full OAuth flo
 ## Why?
 I had to make an API integration against a service provider that still used OAuth 1.0(a) for authorization. I didn't find very many good, easy to use, well documented and small OAuth 1.0a libraries for .NET so I created TinyOAuth1.
 
+## Install
+Install package from [NuGet](https://www.nuget.org/packages/TinyOAuth1/) or Package Manager Console:
+
+`PM> Install-Package TinyOAuth1`
+
 ## How does OAuth 1.0a work?
 Here's a short explanation of how OAuth 1.0a works and a couple of links with great information.
 
@@ -85,8 +90,8 @@ var requestTokenInfo = await tinyOAuth.GetRequestToken();
 var authorizationUrl = tinyOAuth.GetAuthorizationUrl(requestTokenInfo.RequestToken);
 
 // *** You will need to implement these methods yourself ***
-await LaunchWebBrowser(url); // Use Process.Start(url), LaunchUriAsync(new Uri(url)) etc...
-var verificationCode = await InputVerificationCode(url);
+await LaunchWebBrowser(authorizationUrl); // Use Process.Start(authorizationUrl), LaunchUriAsync(new Uri(authorizationUrl)) etc...
+var verificationCode = await InputVerificationCode(authorizationUrl);
 
 // *** Important: Do not run this code before visiting and completing the authorization url ***
 var accessTokenInfo = await tinyOAuth.GetAccessToken(requestTokenInfo.RequestToken, requestTokenInfo.RequestTokenSecret,
@@ -107,20 +112,19 @@ To make API calls we need to create an `Authorization: OAuth ...` header and use
 #### Using the `TinyOAuthMessageHandler` (recommended)
 Will automatically generate and insert the header on each API call.
 ```cs
-HttpClient httpClient =
-	new HttpClient(new TinyOAuthMessageHandler(config, accessTokenInfo.AccessToken, accessTokenInfo.AccessTokenSecret));
+var httpClient = new HttpClient(new TinyOAuthMessageHandler(config, accessTokenInfo.AccessToken, accessTokenInfo.AccessTokenSecret));
 
 // Now we just use the HttpClient like normally
 var resp = await httpClient.GetAsync("http://api.provider.com/something/resource?id=12345");
-string respJson = await resp.Content.ReadAsStringAsync();
+var respJson = await resp.Content.ReadAsStringAsync();
 ```
 
 #### Manually generating and inserting header
 ```cs
-HttpRequestMessage requestMsg = new HttpRequestMessage();
+var requestMsg = new HttpRequestMessage();
 requestMsg.Method = new HttpMethod("GET");
 requestMsg.RequestUri = new Uri("http://api.provider.com/something/resource?id=12345");
-requestMsg.Headers.Authorization = tinyOAuth.GetAuthorizationHeader(...);
+requestMsg.Headers.Authorization = tinyOAuth.GetAuthorizationHeader(accessTokenInfo.AccessToken, accessTokenInfo.AccessTokenSecret, requestMsg.RequestUri.AbsolutePath, HttpMethod.Get);
 var resp = await httpClient.SendAsync(requestMsg);
-string respJson = await resp.Content.ReadAsStringAsync();
+var respJson = await resp.Content.ReadAsStringAsync();
 ```
