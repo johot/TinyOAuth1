@@ -94,8 +94,7 @@ await LaunchWebBrowser(authorizationUrl); // Use Process.Start(authorizationUrl)
 var verificationCode = await InputVerificationCode(authorizationUrl);
 
 // *** Important: Do not run this code before visiting and completing the authorization url ***
-var accessTokenInfo = await tinyOAuth.GetAccessToken(requestTokenInfo.RequestToken, requestTokenInfo.RequestTokenSecret,
-	verificationCode);
+var accessTokenInfo = await tinyOAuth.GetAccessToken(requestTokenInfo.RequestToken, requestTokenInfo.RequestTokenSecret, verificationCode);
 ```
 
 ### Save tokens
