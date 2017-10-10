@@ -10,7 +10,7 @@ namespace TinyOAuth1
 {
 	//https://oauth.net/core/1.0a/
 	//https://oauth1.wp-api.org/docs/basics/Auth-Flow.html
-	public class TinyOAuth
+	public class TinyOAuth : ITinyOAuth
 	{
 		private readonly TinyOAuthConfig _config;
 
@@ -160,21 +160,6 @@ namespace TinyOAuth1
 				"oauth_version=\"1.0\"",
 				"oauth_signature=\"" + Uri.EscapeDataString(signature) + "\""
 			};
-
-			//string data = "realm=\"http://api.telldus.com/\", oauth_consumer_key=\"" + _consumerKey
-			//              +
-			//              "\", oauth_token=\"" + _accessToken +
-			//              "\", oauth_verifier=\"" + _oAuthVerifier +
-			//              "\", oauth_nonce=\"" + nonce +
-			//              "\", oauth_signature_method=\"HMAC-SHA1\", oauth_timestamp=\"" + timeStamp +
-			//              "\", oauth_version=\"1.0\", oauth_signature=\"" + Uri.EscapeDataString(signature) + "\"";
-
-			//string data = "oauth_consumer_key=\"" + _consumerKey +
-			//			  "\", oauth_token=\"" + _accessToken +
-			//			  "\", oauth_verifier=\"" + _oAuthVerifier +
-			//			  "\", oauth_nonce=\"" + nonce +
-			//			  "\", oauth_signature_method=\"HMAC-SHA1\", oauth_timestamp=\"" + timeStamp +
-			//			  "\", oauth_version=\"1.0\", oauth_signature=\"" + Uri.EscapeDataString(signature) + "\"";
 
 			return ConcatList(requestParametersForHeader, ",");
 		}
