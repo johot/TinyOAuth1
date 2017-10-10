@@ -2,6 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
+
+    <PackageId>TinyOAuth1</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Authors>Johan Otterud</Authors>
+    <Description>A tiny, super easy to use OAuth 1.0a library with support for the full OAuth flow. Supports both .NET Framework and .NET Core (by using .NET Standard).</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>First release</PackageReleaseNotes>
+    <Copyright>Copyright 2017 © Johan Otterud. All rights reserved.</Copyright>
+    <PackageTags>oauth 1.0a oauth1 authorization 1.0</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.0</Version>
+    <Company />
+    <PackageLicenseUrl>https://raw.githubusercontent.com/johot/TinyOAuth1/master/LICENSE.md</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/johot/TinyOAuth1</PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard1.3\TinyOAuth1.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

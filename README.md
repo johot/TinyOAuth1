@@ -91,17 +91,12 @@ var verificationCode = await InputVerificationCode(url);
 // *** Important: Do not run this code before visiting and completing the authorization url ***
 var accessTokenInfo = await tinyOAuth.GetAccessToken(requestTokenInfo.RequestToken, requestTokenInfo.RequestTokenSecret,
 	verificationCode);
-
-HttpClient httpClient =
-	new HttpClient(new TinyOAuthMessageHandler(config, accessTokenInfo.AccessToken, accessTokenInfo.AccessTokenSecret));
-
-var resp = await httpClient.GetAsync("http://api.telldus.com/json/device/turnOn?id=1283446");
-string respJson = await resp.Content.ReadAsStringAsync();
 ```
 
 ### Save tokens
 ```cs
 // Implement this any way you see fit but remember to keep these safe or anyone can make API calls on behalf of the user
+SaveAccessTokens(accessTokenInfo);
 ```
 
 ### Making API calls

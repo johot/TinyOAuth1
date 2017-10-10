@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Johan Otterud</authors>
+    <owners>Johan Otterud</owners>
+    <licenseUrl>https://raw.githubusercontent.com/johot/TinyOAuth1/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/johot/TinyOAuth1</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A tiny, super easy to use OAuth 1.0a library with support for the full OAuth flow. Supports both .NET Framework and .NET Core (by using .NET Standard).</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright © 2017 Johan Otterud</copyright>
+    <tags></tags>
+  </metadata>
+</package>
