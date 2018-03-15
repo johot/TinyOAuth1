@@ -9,11 +9,17 @@ namespace TinyOAuth1
 		private string _accessTokenSecret;
 		private TinyOAuth _tinyOAuth;
 
-		public TinyOAuthMessageHandler(TinyOAuthConfig config, string accessToken, string accessTokenSecret) : base(new HttpClientHandler())
+		public TinyOAuthMessageHandler(TinyOAuthConfig config, string accessToken, string accessTokenSecret)
+			: this(config, accessToken, accessTokenSecret, new HttpClientHandler())
 		{
-			_tinyOAuth = new TinyOAuth(config);
-			_accessTokenSecret = accessTokenSecret;
-			_accessToken = accessToken;
+		}
+
+		public TinyOAuthMessageHandler(TinyOAuthConfig config, string accessToken, string accessTokenSecret, HttpMessageHandler handler)
+			: base(handler)
+		{
+			this._tinyOAuth = new TinyOAuth(config);
+			this._accessTokenSecret = accessTokenSecret;
+			this._accessToken = accessToken;
 		}
 
 		protected override Task<HttpResponseMessage> SendAsync(
