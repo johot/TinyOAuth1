@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.OpenSsl;
+using Org.BouncyCastle.Security;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
@@ -125,7 +129,7 @@ namespace TinyOAuth1
 			{
 				"oauth_consumer_key=" + _config.ConsumerKey,
 				"oauth_token=" + accessToken,
-				"oauth_signature_method=HMAC-SHA1",
+				"oauth_signature_method=" + _config.SignatureMethod,
 				"oauth_timestamp=" + timeStamp,
 				"oauth_nonce=" + nonce,
 				"oauth_version=1.0"
@@ -147,14 +151,22 @@ namespace TinyOAuth1
 			var signatureBaseString = GetSignatureBaseString(httpMethod.ToString().ToUpper(), url, requestParameters);
 
 			// Appendix A.5.2. Calculating Signature Value
-			var signature = GetSignature(signatureBaseString, _config.ConsumerSecret, accessTokenSecret);
+			string signature = String.Empty;
+			if (_config.SignatureMethod.ToLower().Contains("rsa"))
+			{
+				signature = GetRSASignature(signatureBaseString, _config.SigningKey);
+			}
+			else
+			{
+				signature = GetSignature(signatureBaseString, _config.ConsumerSecret, accessTokenSecret);
+			}
 
 			// Same as request parameters but uses a quote (") character around its values and is comma separated
 			var requestParametersForHeader = new List<string>
 			{
 				"oauth_consumer_key=\"" + _config.ConsumerKey + "\"",
 				"oauth_token=\"" + accessToken + "\"",
-				"oauth_signature_method=\"HMAC-SHA1\"",
+				"oauth_signature_method=\"" + _config.SignatureMethod + "\"",
 				"oauth_timestamp=\"" + timeStamp + "\"",
 				"oauth_nonce=\"" + nonce + "\"",
 				"oauth_version=\"1.0\"",
@@ -215,6 +227,26 @@ namespace TinyOAuth1
 			// return signature;
 		}
 
+		private string GetRSASignature(string stringToSign, string privateKey)
+		{
+			using (var reader = new StringReader(privateKey))
+			{
+				AsymmetricCipherKeyPair kp = (AsymmetricCipherKeyPair)new PemReader(reader).ReadObject();
+
+				ISigner signer = SignerUtilities.GetSigner("SHA1withRSA");
+
+				signer.Init(true, kp.Private);
+
+				var bytes = Encoding.UTF8.GetBytes(stringToSign);
+
+
+				signer.BlockUpdate(bytes, 0, bytes.Length);
+				byte[] signature = signer.GenerateSignature();
+
+				return Convert.ToBase64String(signature);
+			}
+		}
+
 		// 6.3.1. Consumer Requests an Access Token +
 		// 6.3.2. Service Provider Grants an Access Token
 		public async Task<AccessTokenInfo> GetAccessTokenAsync(string requestToken, string requestTokenSecret, string verifier)
@@ -242,7 +274,7 @@ namespace TinyOAuth1
 			{
 				"oauth_consumer_key=" + _config.ConsumerKey,
 				"oauth_token=" + requestToken,
-				"oauth_signature_method=HMAC-SHA1",
+				"oauth_signature_method=" + _config.SignatureMethod,
 				"oauth_timestamp=" + timeStamp,
 				"oauth_nonce=" + nonce,
 				"oauth_version=1.0",
@@ -253,7 +285,15 @@ namespace TinyOAuth1
 			var signatureBaseString = GetSignatureBaseString("POST", _config.AccessTokenUrl, requestParameters);
 
 			// Appendix A.5.2. Calculating Signature Value
-			var signature = GetSignature(signatureBaseString, _config.ConsumerSecret, requestTokenSecret);
+			string signature = String.Empty;
+			if (_config.SignatureMethod.ToLower().Contains("rsa"))
+			{
+				signature = GetRSASignature(signatureBaseString, _config.SigningKey);
+			}
+			else
+			{
+				signature = GetSignature(signatureBaseString, _config.ConsumerSecret, requestTokenSecret);
+			}
 
 			var responseText =
 				await
@@ -318,7 +358,7 @@ namespace TinyOAuth1
 			var requestParameters = new List<string>
 			{
 				"oauth_consumer_key=" + _config.ConsumerKey,
-				"oauth_signature_method=HMAC-SHA1",
+				"oauth_signature_method=" + _config.SignatureMethod,
 				"oauth_timestamp=" + timeStamp,
 				"oauth_nonce=" + nonce,
 				"oauth_version=1.0",
@@ -326,11 +366,19 @@ namespace TinyOAuth1
 			};
 
 			// Appendix A.5.1. Generating Signature Base String
-			var singatureBaseString = GetSignatureBaseString("POST", _config.RequestTokenUrl, requestParameters);
+			var signatureBaseString = GetSignatureBaseString("POST", _config.RequestTokenUrl, requestParameters);
 
 			// Appendix A.5.2. Calculating Signature Value
-			var signature = GetSignature(singatureBaseString, _config.ConsumerSecret);
-
+			string signature = String.Empty;
+			if (_config.SignatureMethod.ToLower().Contains("rsa"))
+			{
+				signature = GetRSASignature(signatureBaseString, _config.SigningKey);
+			}
+			else
+			{
+				signature = GetSignature(signatureBaseString, _config.ConsumerSecret);
+			}
+			
 			// 6.1.2.Service Provider Issues an Unauthorized Request Token
 			var responseText = await PostData(_config.RequestTokenUrl,
 				ConcatList(requestParameters, "&") + "&oauth_signature=" + Uri.EscapeDataString(signature));
