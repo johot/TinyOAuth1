@@ -239,7 +239,6 @@ namespace TinyOAuth1
 
 				var bytes = Encoding.UTF8.GetBytes(stringToSign);
 
-
 				signer.BlockUpdate(bytes, 0, bytes.Length);
 				byte[] signature = signer.GenerateSignature();
 
