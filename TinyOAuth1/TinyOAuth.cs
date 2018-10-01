@@ -30,7 +30,14 @@ namespace TinyOAuth1
 			//oauth_callback:
 			//OPTIONAL.The Consumer MAY specify a URL the Service Provider will use to redirect the User back to the Consumer when Obtaining User Authorization is complete.
 
-			return _config.AuthorizeTokenUrl + Uri.UnescapeDataString("?oauth_token=" + requestToken);
+			string url = $"{_config.AuthorizeTokenUrl}?{Uri.UnescapeDataString($"oauth_token={requestToken}")}";
+
+			if (!String.IsNullOrWhiteSpace(_config.OauthCallback))
+			{
+				url += $"&{Uri.UnescapeDataString($"oauth_callback={_config.OauthCallback}")}";
+			}
+
+			return url;
 		}
 
 		private string GetNonce()
