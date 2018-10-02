@@ -13,5 +13,8 @@
     <releaseNotes></releaseNotes>
     <copyright>Copyright © 2017 Johan Otterud</copyright>
     <tags></tags>
+    <dependencies>
+      <dependency id="BouncyCastle.NetCore" version="(1.8.2,)" />
+    </dependencies>
   </metadata>
 </package>

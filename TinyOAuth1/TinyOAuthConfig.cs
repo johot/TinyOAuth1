@@ -25,5 +25,8 @@ namespace TinyOAuth1
 		public string AccessTokenUrl { get; set; }
 		public string AuthorizeTokenUrl { get; set; }
 		public string RequestTokenUrl { get; set; }
+		public string SignatureMethod { get; set; } = "HMAC-SHA1";
+		public string SigningKey { get; set; }
+		public string OauthCallback { get; set; } = "oob";
 	}
 }
