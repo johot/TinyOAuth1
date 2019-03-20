@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using TinyOAuth1.Utility;
 
 namespace TinyOAuth1
 {
@@ -95,7 +98,7 @@ namespace TinyOAuth1
 			Added to the URLs in the query part (as defined by [RFC3986] section 3).
 			In addition to these defined methods, future extensions may describe alternate methods for sending the OAuth Protocol Parameters. The methods for sending other request parameters are left undefined, but SHOULD NOT use the OAuth HTTP Authorization Scheme header.
 
-      		*/
+	  		*/
 
 			/* 5.4.1.  Authorization Header
 
@@ -267,30 +270,19 @@ namespace TinyOAuth1
 
 			if (!string.IsNullOrEmpty(responseText))
 			{
-				string oauthToken = null;
-				string oauthTokenSecret = null;
-				var keyValPairs = responseText.Split('&');
+				var keyValPairs = HttpUtility.ParseQueryString(responseText);
 
-				for (var i = 0; i < keyValPairs.Length; i++)
-				{
-					var splits = keyValPairs[i].Split('=');
-					switch (splits[0])
-					{
-						case "oauth_token":
-							oauthToken = splits[1];
-							break;
-						case "oauth_token_secret":
-							oauthTokenSecret = splits[1];
-							break;
-					}
-				}
+				var oauthToken = keyValPairs.GetValues("oauth_token")?.SingleOrDefault();
+				var oauthTokenSecret = keyValPairs.GetValues("oauth_token_secret")?.SingleOrDefault();
 
 				return new AccessTokenInfo
 				{
 					AccessToken = oauthToken,
-					AccessTokenSecret = oauthTokenSecret
+					AccessTokenSecret = oauthTokenSecret,
+					AdditionalParams = keyValPairs.ToDictionary()
 				};
 			}
+
 			throw new Exception("Empty response text when getting the access token");
 		}
 
@@ -342,36 +334,21 @@ namespace TinyOAuth1
 				//	oauth_token_secret:
 				//The Token Secret.
 
-				string oauthToken = null;
-				string oauthTokenSecret = null;
 				//string oauthAuthorizeUrl = null;
 
-				var keyValPairs = responseText.Split('&');
+				var keyValPairs = HttpUtility.ParseQueryString(responseText);
 
-				for (var i = 0; i < keyValPairs.Length; i++)
-				{
-					var splits = keyValPairs[i].Split('=');
-					switch (splits[0])
-					{
-						case "oauth_token":
-							oauthToken = splits[1];
-							break;
-						case "oauth_token_secret":
-							oauthTokenSecret = splits[1];
-							break;
-							// TODO: Handle this one?
-							//case "xoauth_request_auth_url":
-							//	oauthAuthorizeUrl = splits[1];
-							//	break;
-					}
-				}
+				var oauthToken = keyValPairs.GetValues("oauth_token")?.SingleOrDefault();
+				var oauthTokenSecret = keyValPairs.GetValues("oauth_token_secret")?.SingleOrDefault();
 
 				return new RequestTokenInfo
 				{
 					RequestToken = oauthToken,
-					RequestTokenSecret = oauthTokenSecret
+					RequestTokenSecret = oauthTokenSecret,
+					AdditionalParams = keyValPairs.ToDictionary()
 				};
 			}
+
 			throw new Exception("Empty response text when getting the request token");
 		}
 
