@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -12,13 +12,13 @@
     <Copyright>Copyright 2017 © Johan Otterud. All rights reserved.</Copyright>
     <PackageTags>oauth 1.0a oauth1 authorization 1.0 authentication</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <Company />
     <PackageLicenseUrl>https://raw.githubusercontent.com/johot/TinyOAuth1/master/LICENSE.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/johot/TinyOAuth1</PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <FileVersion>1.1.0.0</FileVersion>
+    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <FileVersion>1.2.0.0</FileVersion>
     
   </PropertyGroup>
 
