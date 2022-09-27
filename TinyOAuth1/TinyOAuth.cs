@@ -138,7 +138,7 @@ namespace TinyOAuth1
 				var parameters = ExtractQueryParameters(requestUri.Query);
 
 				foreach (var kvp in parameters)
-					requestParameters.Add(kvp.Key + "=" + kvp.Value);
+					requestParameters.Add(Uri.EscapeDataString(kvp.Key) + "=" + Uri.EscapeDataString(kvp.Value));
 
 				// TODO: url = GetNormalizedUrl(requestUri);
 			}
